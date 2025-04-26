@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forumapp/views/home.dart';
 import 'package:forumapp/views/login_page.dart';
 import 'package:get/get.dart'; 
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return const GetMaterialApp( // <-- THIS
       debugShowCheckedModeBanner: false,
       title: 'Forum App',
-      home: LoginPage(),
+      home: HomePage(), //home page ganti ke LoginPage() kalo mau login page
     );
   }
 }
