@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 // import 'package:forumapp/controllers/authentication.dart';
-import 'package:forumapp/views/register_page.dart';
+import 'package:forumapp/views/login_page.dart';
+import 'package:get/get.dart';
 import './widgets/input_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:get/get.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _usernameController = TextEditingController();
+class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   // final AuthenticationController _authenticationController =
-  //     Get.put(AuthenticationController());                 //ini backend nanti, placeholder dlu, kalo udh apus aja commentnya
-
+  //     Get.put(AuthenticationController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.width;
@@ -31,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Login Page',
+                'Register Page',
                 style: GoogleFonts.poppins(
                   fontSize: size * 0.080,
                 ),
@@ -40,9 +42,25 @@ class _LoginPageState extends State<LoginPage> {
                 height: 30,
               ),
               InputWidget(
+                hintText: 'Name',
+                obscureText: false,
+                controller: _nameController,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              InputWidget(
                 hintText: 'Username',
                 obscureText: false,
                 controller: _usernameController,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              InputWidget(
+                hintText: 'Email',
+                obscureText: false,
+                controller: _emailController,
               ),
               const SizedBox(
                 height: 20,
@@ -56,32 +74,31 @@ class _LoginPageState extends State<LoginPage> {
                 height: 30,
               ),
               ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black, 
-              elevation: 0,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 50, 
-                vertical: 10
-                )
-              ),
-            onPressed: () {}, 
-            child: Text(
-              'Login',
-              style: GoogleFonts.poppins(
-                fontSize: 
-                size * 0.040,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 50,
+                    vertical: 15,
+                  ),
+                ),
+                onPressed: null, // disabled by setting to null
+                child: Text(
+                  'Register',
+                  style: GoogleFonts.poppins(
+                    fontSize: size * 0.040,
+                  ),
                 ),
               ),
-            ),
               const SizedBox(
                 height: 20,
               ),
               TextButton(
                 onPressed: () {
-                  Get.to(() => const RegisterPage());
+                  Get.to(() => const LoginPage());
                 },
                 child: Text(
-                  'Register',
+                  'Login',
                   style: GoogleFonts.poppins(
                     fontSize: size * 0.040,
                     color: Colors.black,
