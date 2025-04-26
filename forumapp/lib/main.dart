@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return const GetMaterialApp( // <-- THIS
       debugShowCheckedModeBanner: false,
       title: 'Forum App',
-      home: HomePage(), //home page ganti ke LoginPage() kalo mau login page
+      home: LoginPage(), //kalo mau ke home page pencet tombol login
     );
   }
 }

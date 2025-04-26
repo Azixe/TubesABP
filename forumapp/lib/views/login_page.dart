@@ -4,6 +4,7 @@ import 'package:forumapp/views/register_page.dart';
 import './widgets/input_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
+import './home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -64,7 +65,9 @@ class _LoginPageState extends State<LoginPage> {
                 vertical: 10
                 )
               ),
-            onPressed: () {}, 
+            onPressed: () {
+              Get.to(() => const HomePage());
+            }, 
             child: Text(
               'Login',
               style: GoogleFonts.poppins(
