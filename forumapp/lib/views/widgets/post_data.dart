@@ -54,13 +54,8 @@ class PostData extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-<<<<<<< HEAD
           Text('John Doe', style: GoogleFonts.poppins()),
           Text('johndoe.com', style: GoogleFonts.poppins(fontSize: 10)),
-=======
-          Text('Farelia rajendrae', style: GoogleFonts.poppins()),
-          Text('rajendrae99.com', style: GoogleFonts.poppins(fontSize: 10)),
->>>>>>> f388ebb9173b8d2246b0e53455bd05c551c28a95
           const SizedBox(height: 10),
           Text('I like cats!'),
           Row(
