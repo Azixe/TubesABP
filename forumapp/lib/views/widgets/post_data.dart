@@ -25,9 +25,11 @@ class PosttData extends StatelessWidget {
           Row(
             children: [
               IconButton(onPressed: () {}, icon: Icon(Icons.thumb_up)),
-              IconButton(onPressed: () {
-                Get.to(() => PostDetails());
-              }, icon: Icon(Icons.message),
+              IconButton(
+                onPressed: () {
+                  Get.to(() => PostDetails());
+                },
+                icon: Icon(Icons.message),
               ),
             ],
           ),
@@ -52,8 +54,8 @@ class PostData extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Precios Oladele', style: GoogleFonts.poppins()),
-          Text('ahduahduah.com', style: GoogleFonts.poppins(fontSize: 10)),
+          Text('Farelia rajendrae', style: GoogleFonts.poppins()),
+          Text('rajendrae99.com', style: GoogleFonts.poppins(fontSize: 10)),
           const SizedBox(height: 10),
           Text('I am a Black Hat'),
           Row(
