@@ -25,60 +25,48 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 'Login Page',
-                style: GoogleFonts.poppins(
-                  fontSize: size * 0.080,
-                ),
+                style: GoogleFonts.poppins(fontSize: size * 0.080),
               ),
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30),
               InputWidget(
                 hintText: 'Username',
                 obscureText: false,
                 controller: _usernameController,
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               InputWidget(
                 hintText: 'Password',
                 obscureText: true,
                 controller: _passwordController,
               ),
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30),
               ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black, 
-              elevation: 0,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 50, 
-                vertical: 10
-                )
-              ),
-            onPressed: () {
-              Get.to(() => const HomePage());
-            }, 
-            child: Text(
-              'Login',
-              style: GoogleFonts.poppins(
-                fontSize: 
-                size * 0.040,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 50,
+                    vertical: 10,
+                  ),
+                ),
+                onPressed: () {
+                  Get.to(() => const HomePage());
+                },
+                child: Text(
+                  'Login',
+                  style: GoogleFonts.poppins(
+                    fontSize: size * 0.040,
+                    color: const Color.fromARGB(255, 253, 253, 253),
+                  ),
                 ),
               ),
-            ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               TextButton(
                 onPressed: () {
                   Get.to(() => const RegisterPage());
@@ -90,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.black,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

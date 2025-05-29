@@ -15,10 +15,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       appBar: AppBar(
         title: const Text('Forum App', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
+        backgroundColor: const Color.fromARGB(255, 20, 145, 247),
         elevation: 4,
         centerTitle: true,
       ),
@@ -52,7 +52,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         icon: const Icon(Icons.send, size: 20),
-                        label: const Text('Post', style: TextStyle(fontSize: 16)),
+                        label: const Text(
+                          'Post',
+                          style: TextStyle(fontSize: 16),
+                        ),
                         onPressed: () {},
                       ),
                     ),
@@ -63,10 +66,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 30),
             const Text(
               'Recent Posts',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             PosttData(),
