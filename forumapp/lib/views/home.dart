@@ -17,9 +17,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Forum APP'),
+    return Scaffold(      appBar: AppBar(
+        title: Container(
+          height: 40,
+          child: Image.asset(
+            'assets/images/chillntalk_logo.png',
+            fit: BoxFit.contain,
+          ),
+        ),
         backgroundColor: const Color.fromARGB(255, 3, 140, 245),
         elevation: 0,
         centerTitle: true,

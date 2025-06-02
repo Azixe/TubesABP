@@ -24,10 +24,19 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // ChillNTalk Logo
+              Container(
+                height: 120,
+                width: 120,
+                margin: const EdgeInsets.only(bottom: 20),
+                child: Image.asset(
+                  'assets/images/chillntalk_logo.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
               Text(
                 'Login Page',
                 style: GoogleFonts.poppins(fontSize: size * 0.080),
