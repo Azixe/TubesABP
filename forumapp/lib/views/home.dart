@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 2, 109, 239),
+                    foregroundColor: Colors.white,
                     elevation: 0,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 50,
