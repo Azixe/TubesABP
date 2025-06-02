@@ -32,5 +32,19 @@ class AuthenticationController extends Controller
 
     public function login(LoginRequest $request){
         $request->validated();
+
+        $user = User::whereUsername($request->username)->first();
+        if(!$user || !Hash::check($request->password, $user->password)) {
+            return response([
+                'message' => 'Invalid credentials'
+            ], 422);
+        }
+
+        $token = $user->createToken('forumapp')->plainTextToken;
+
+        return response([
+            'user' => $user,
+            'token' => $token
+        ], 200);
     }
 }
