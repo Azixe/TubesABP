@@ -4,7 +4,6 @@ import 'package:forumapp/views/register_page.dart';
 import './widgets/input_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
-import './home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

@@ -46,7 +46,7 @@ class _PostDetailsState extends State<PostDetails> {
               const SizedBox(
                 height: 10,
               ),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 300,
                 child: Obx(() {

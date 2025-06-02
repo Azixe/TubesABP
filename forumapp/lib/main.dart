@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:forumapp/views/home.dart';
 import 'package:forumapp/views/login_page.dart';
 import 'package:get/get.dart'; 
 
