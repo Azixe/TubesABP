@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'widgets/post_field.dart';
 import 'widgets/post_data.dart';
+import 'package:forumapp/controllers/post_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,67 +12,87 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final TextEditingController _postController = TextEditingController();
+  final PostController _postController = Get.put(PostController());
+  final TextEditingController _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       appBar: AppBar(
-        title: const Text('Forum App', style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 20, 145, 247),
-        elevation: 4,
+        title: const Text('Forum APP'),
+        backgroundColor: Colors.black,
+        elevation: 0,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    PostField(
-                      hintText: 'What do you want to ask?',
-                      controller: _postController,
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        icon: const Icon(Icons.send, size: 20),
-                        label: const Text(
-                          'Post',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await _postController.getAllPosts();
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PostField(
+                  hintText: 'What do you want to ask?',
+                  controller: _textController,
                 ),
-              ),
+                // const SizedBox(
+                //   height: ,
+                // ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 50,
+                      vertical: 10,
+                    ),
+                  ),
+                  onPressed: () async {
+                    await _postController.createPost(
+                      content: _textController.text.trim(),
+                    );
+                    _textController.clear();
+                    _postController.getAllPosts();
+                  },
+                  child: Obx(() {
+                    return _postController.isLoading.value
+                        ? const CircularProgressIndicator()
+                        : Text('Post');
+                  }),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Text('Posts'),
+                const SizedBox(
+                  height: 20,
+                ),
+                Obx(() {
+                  return _postController.isLoading.value
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _postController.posts.value.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: PostData(
+                                post: _postController.posts.value[index],
+                              ),
+                            );
+                          },
+                        );
+                }),
+              ],
             ),
-            const SizedBox(height: 30),
-            const Text(
-              'Recent Posts',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            PosttData(),
-          ],
+          ),
         ),
       ),
     );

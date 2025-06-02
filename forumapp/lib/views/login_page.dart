@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:forumapp/controllers/authentication.dart';
+import 'package:forumapp/controllers/authentication.dart';
 import 'package:forumapp/views/register_page.dart';
 import './widgets/input_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,8 +16,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  // final AuthenticationController _authenticationController =
-  //     Get.put(AuthenticationController());                 //ini backend nanti, placeholder dlu, kalo udh apus aja commentnya
+  final AuthenticationController _authenticationController =
+      Get.put(AuthenticationController());                 //ini backend nanti, placeholder dlu, kalo udh apus aja commentnya
 
   @override
   Widget build(BuildContext context) {
