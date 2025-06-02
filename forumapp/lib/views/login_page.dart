@@ -55,18 +55,29 @@ class _LoginPageState extends State<LoginPage> {
                     vertical: 10,
                   ),
                 ),
-                onPressed: () {
-                  Get.to(() => const HomePage());
+                onPressed: () async {
+                  await _authenticationController.login(
+                    username: _usernameController.text.trim(), 
+                    password: _passwordController.text.trim(),
+                    );
                 },
-                child: Text(
+                child: Obx(() {
+                  return _authenticationController.isLoading.value
+                  ? const CircularProgressIndicator(
+                    color: Colors.white,
+                  ) 
+                     : Text(
                   'Login',
                   style: GoogleFonts.poppins(
                     fontSize: size * 0.040,
                     color: const Color.fromARGB(255, 253, 253, 253),
                   ),
-                ),
+                );
+              }),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(
+                height: 20,
+                ),
               TextButton(
                 onPressed: () {
                   Get.to(() => const RegisterPage());
