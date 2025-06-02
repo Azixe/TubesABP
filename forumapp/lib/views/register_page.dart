@@ -100,7 +100,7 @@ Widget build(BuildContext context) {
                       : Text(
                           'Register',
                           style: GoogleFonts.poppins(
-                            fontSize: size * 0.040,
+                            fontSize: size * 0.040, color: Colors.white
                           ),
                         );
                 }),
