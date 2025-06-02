@@ -30,7 +30,7 @@ class _PostDetailsState extends State<PostDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color.fromARGB(255, 242, 244, 244),
         elevation: 0,
         centerTitle: true,
         title: Text(widget.post.user!.name!),
@@ -77,7 +77,8 @@ class _PostDetailsState extends State<PostDetails> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
+                  backgroundColor: const Color.fromARGB(255, 4, 175, 243),
+                  foregroundColor:const Color.fromARGB(255, 253, 255, 255),
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 50,
