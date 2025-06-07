@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
+            Container(
               height: 36,
               child: Image.asset(
                 'assets/images/chillntalk_logo.png',
@@ -42,11 +42,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () => _postController.getAllPosts(),
-            tooltip: 'Refresh posts',
-          ),
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
@@ -215,15 +210,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppTheme.primaryColor,
-        elevation: 4,
-        onPressed: () {
-          // Scroll to top or show post creation dialog
-          _postController.getAllPosts();
-        },
-        child: const Icon(Icons.refresh),
       ),
     );
   }

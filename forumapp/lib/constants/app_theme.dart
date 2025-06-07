@@ -20,8 +20,10 @@ class AppTheme {
       colorScheme: ColorScheme.light(
         primary: primaryColor,
         secondary: accentColor,
+        background: backgroundColor,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
+        onBackground: textPrimaryColor,
         surface: cardColor,
         onSurface: textPrimaryColor,
       ),
