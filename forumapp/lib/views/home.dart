@@ -5,6 +5,7 @@ import 'widgets/post_data.dart';
 import 'package:forumapp/controllers/post_controller.dart';
 import 'package:forumapp/constants/app_theme.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:forumapp/views/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,12 +41,11 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ],
-        ),
-        actions: [
+        ),        actions: [
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              // User profile feature can be added here
+              Get.to(() => const ProfilePage());
             },
             tooltip: 'Profile',
           ),
