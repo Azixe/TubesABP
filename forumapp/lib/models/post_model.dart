@@ -17,6 +17,8 @@ class PostModel {
     this.updatedAt,
     this.liked,
     this.user,
+    this.totalLikes,
+    this.totalComment,
   });
 
   int? id;
@@ -26,6 +28,8 @@ class PostModel {
   DateTime? updatedAt;
   bool? liked;
   User? user;
+  int? totalLikes;
+  int? totalComment;
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
         id: json["id"],
@@ -34,6 +38,8 @@ class PostModel {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         liked: json["liked"],
+        totalLikes: json['total_likes'],
+        totalComment: json['total_comment'],
         user: User.fromJson(json["user"]),
       );
 
@@ -44,6 +50,8 @@ class PostModel {
         "created_at": createdAt!.toIso8601String(),
         "updated_at": updatedAt!.toIso8601String(),
         "liked": liked,
+        "total_likes": totalLikes,
+        "total_comment": totalComment,
         "user": user!.toJson(),
       };
 }

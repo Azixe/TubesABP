@@ -13,6 +13,7 @@ class PostController extends GetxController {
   Rx<List<CommentModel>> comments = Rx<List<CommentModel>>([]);
   final isLoading = false.obs;
   final box = GetStorage();
+  var totalLikes = 0.obs;
 
   @override
   void onInit() {
@@ -159,4 +160,58 @@ class PostController extends GetxController {
       print(e.toString());
     }
   }
+
+  Future<int?> getTotalLikes(int feed_id) async {
+  try {
+    isLoading.value = true;
+    var response = await http.get(
+      Uri.parse('${url}feed/totallikes/$feed_id'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${box.read('token')}',
+      },
+    );
+
+    isLoading.value = false;
+
+    if (response.statusCode == 200) {
+      final totalLikes = json.decode(response.body)['total_likes'];
+      return totalLikes;
+    } else {
+      print('Error: ${json.decode(response.body)}');
+      return null;
+    }
+  } catch (e) {
+    isLoading.value = false;
+    print('Exception: $e');
+    return null;
+  }
+}
+
+Future<int?> getTotalComment(int feed_id) async {
+  try {
+    isLoading.value = true;
+    var response = await http.get(
+      Uri.parse('${url}feed/totalcomment/$feed_id'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${box.read('token')}',
+      },
+    );
+
+    isLoading.value = false;
+
+    if (response.statusCode == 200) {
+      final totalLikes = json.decode(response.body)['total_comment'];
+      return totalLikes;
+    } else {
+      print('Error: ${json.decode(response.body)}');
+      return null;
+    }
+  } catch (e) {
+    isLoading.value = false;
+    print('Exception: $e');
+    return null;
+  }
+}
 }

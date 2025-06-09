@@ -94,7 +94,7 @@ class _PostDataState extends State<PostData> {
                 TextButton.icon(
                   onPressed: () async {
                     await _postController.likeAndDislike(widget.post.id);
-                    _postController.getAllPosts();
+                    await _postController.getAllPosts();
                   },
                   icon: Icon(
                     widget.post.liked! ? Icons.thumb_up : Icons.thumb_up_outlined,
@@ -102,7 +102,7 @@ class _PostDataState extends State<PostData> {
                     size: 20,
                   ),
                   label: Text(
-                    'Like',
+                    '${widget.post.totalLikes ?? 0}',
                     style: GoogleFonts.poppins(
                       color: widget.post.liked! ? AppTheme.primaryColor : AppTheme.textSecondaryColor,
                       fontSize: 14,
@@ -121,7 +121,7 @@ class _PostDataState extends State<PostData> {
                     size: 20,
                   ),
                   label: Text(
-                    'Comment',
+                    '${widget.post.totalLikes ?? 0} Comment',
                     style: GoogleFonts.poppins(
                       color: AppTheme.textSecondaryColor,
                       fontSize: 14,

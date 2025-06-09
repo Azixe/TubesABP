@@ -13,6 +13,13 @@ class FeedController extends Controller
 {
     public function index(){
         $feeds = Feed::with('user')->latest()->get();
+
+        $feeds->transform(function ($feed) {
+        $feed->total_likes = $feed->likes()->count(); // tambahkan total_likes
+        $feed->total_comment = $feed->comments()->count();
+        return $feed;
+        });
+
         return response([
             'feeds' => $feeds
         ], 200);
@@ -81,5 +88,21 @@ class FeedController extends Controller
         return response([
             'comments' => $comments
         ], 200);
+    }
+
+    public function totalLikes($feed_id){
+    $total_likes = Like::where('feed_id', $feed_id)->count();
+
+    return response([
+            'total_likes' => $total_likes
+        ], 201);
+    }
+
+    public function totalComment($feed_id){
+    $total_comment = Comment::where('feed_id', $feed_id)->count();
+
+    return response([
+            'total_comment' => $total_comment
+        ], 201);
     }
 }

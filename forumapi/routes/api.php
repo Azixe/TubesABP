@@ -21,6 +21,8 @@ Route::post('/feed/store', [FeedController::class, 'store'])->middleware('auth:s
 Route::post('/feed/like/{feed_id}', [FeedController::class, 'likePost'])->middleware('auth:sanctum');
 Route::post('/feed/comment/{feed_id}', [FeedController::class, 'comment'])->middleware('auth:sanctum');
 Route::get('/feed/comments/{feed_id}', [FeedController::class, 'getComments'])->middleware('auth:sanctum');
+Route::get('/feed/totalcomment/{feed_id}', [FeedController::class, 'totalComment'])->middleware('auth:sanctum');
+Route::get('/feed/totallikes/{feed_id}', [FeedController::class, 'totalLikes'])->middleware('auth:sanctum');
 
 Route::get('/test',function(){
     return response([
