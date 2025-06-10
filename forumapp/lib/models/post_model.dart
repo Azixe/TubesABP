@@ -19,6 +19,7 @@ class PostModel {
     this.user,
     this.totalLikes,
     this.totalComment,
+    this.Profile,
   });
 
   int? id;
@@ -30,6 +31,7 @@ class PostModel {
   User? user;
   int? totalLikes;
   int? totalComment;
+  String? Profile;
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
         id: json["id"],
@@ -41,6 +43,7 @@ class PostModel {
         totalLikes: json['total_likes'],
         totalComment: json['total_comment'],
         user: User.fromJson(json["user"]),
+        Profile: json['profile'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -52,6 +55,7 @@ class PostModel {
         "liked": liked,
         "total_likes": totalLikes,
         "total_comment": totalComment,
+        "profile": Profile,
         "user": user!.toJson(),
       };
 }

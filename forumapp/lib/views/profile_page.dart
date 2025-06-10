@@ -24,6 +24,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     _tabController = TabController(length: 3, vsync: this);
     // Load user's posts when page loads
     _postController.getAllPosts();
+    _userController.getProfile();
+    _userController.getUserPosts();
   }
 
   @override
@@ -67,8 +69,157 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
       ),
       body: Column(
         children: [
-          // Profile Header
-          Container(
+    Expanded(
+      child: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverToBoxAdapter(child: _buildProfileHeader()),
+          SliverToBoxAdapter(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+            child: TabBar(
+              controller: _tabController,
+              indicatorColor: AppTheme.primaryColor,
+              labelColor: AppTheme.primaryColor,
+              unselectedLabelColor: AppTheme.textSecondaryColor,
+              labelStyle: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+              unselectedLabelStyle: GoogleFonts.poppins(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
+              tabs: const [
+                Tab(
+                  icon: Icon(Icons.article_outlined),
+                  text: 'Posts',
+                ),
+                Tab(
+                  icon: Icon(Icons.comment_outlined),
+                  text: 'Comments',
+                ),
+              ],
+            ),
+          ),
+          ),
+        ],
+          // Tab Views
+            body: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildUserPostsTab(),
+                _buildUserCommentsTab(),
+              ],
+            ),
+          ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard(String title, String count, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: AppTheme.primaryColor,
+            size: 24,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            count,
+            style: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.textPrimaryColor,
+            ),
+          ),
+          Text(
+            title,
+            style: GoogleFonts.poppins(
+              fontSize: 12,
+              color: AppTheme.textSecondaryColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _buildUserPostsTab() {
+    return Obx(() {
+      final userPosts = _userController.userPosts;
+      
+      if (_postController.isLoading.value) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (userPosts.isEmpty) {
+        return _buildEmptyState(
+          Icons.article_outlined,
+          'No posts yet',
+          'Start sharing your thoughts with the community!',
+        );
+      }
+      
+      return ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: userPosts.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: PostData(post: userPosts[index]),
+          );
+        },
+      );
+    });
+  }
+
+  Widget _buildUserCommentsTab() {
+    return Obx(() {
+      // For now, we'll show a placeholder since we don't have user-specific comments
+      // In a real app, you'd fetch comments made by the current user
+      
+      if (_postController.isLoading.value) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      
+      return _buildEmptyState(
+        Icons.comment_outlined,
+        'No comments yet',
+        'Join the conversation by commenting on posts!',
+      );
+    });
+  }
+
+  Widget _buildProfileHeader() {
+    return Container(
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -135,7 +286,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   const SizedBox(height: 16),
                     // Username
                   Obx(() => Text(
-                    _userController.currentUser.value?.name ?? 'Unknown User',
+                    "${_userController.profile['username'] ?? 'unknown'}",
                     style: GoogleFonts.poppins(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -144,7 +295,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   )),
                   
                   Obx(() => Text(
-                    '@${_userController.currentUser.value?.username ?? 'unknown'}',
+                    _userController.profile['email'] ?? 'email not found',
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       color: AppTheme.textSecondaryColor,
@@ -154,7 +305,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   const SizedBox(height: 8),
                   
                   Obx(() => Text(
-                    _userController.getMemberSinceText(),
+                    'Member since: ${_userController.profile['created_at']?.split('T')[0] ?? '-'}',
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       color: AppTheme.textSecondaryColor,
@@ -165,25 +316,20 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                     // Stats Row
                   Obx(() {
                     // Update user stats when posts change
-                    _userController.updateUserStats(_postController.posts.value);
+                    // _userController.updateUserStats(_postController.posts.value);
                     
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _buildStatCard(
                           'Posts',
-                          '${_userController.userPostsCount.value}',
+                          '${_userController.profile['total_posts'] ?? 0}',
                           Icons.article_outlined,
                         ),
                         _buildStatCard(
                           'Comments',
-                          '${_userController.userCommentsCount.value}',
+                          '${_userController.profile['total_comment'] ?? 0}',
                           Icons.comment_outlined,
-                        ),
-                        _buildStatCard(
-                          'Saved',
-                          '${_userController.savedPostsCount.value}',
-                          Icons.bookmark_outline,
                         ),
                       ],
                     );
@@ -191,155 +337,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 ],
               ),
             ),
-          ),
-          
-          // Tab Bar
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 3,
-                  offset: const Offset(0, 1),
-                ),
-              ],
-            ),
-            child: TabBar(
-              controller: _tabController,
-              indicatorColor: AppTheme.primaryColor,
-              labelColor: AppTheme.primaryColor,
-              unselectedLabelColor: AppTheme.textSecondaryColor,
-              labelStyle: GoogleFonts.poppins(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
-              unselectedLabelStyle: GoogleFonts.poppins(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-              ),
-              tabs: const [
-                Tab(
-                  icon: Icon(Icons.article_outlined),
-                  text: 'Posts',
-                ),
-                Tab(
-                  icon: Icon(Icons.comment_outlined),
-                  text: 'Comments',
-                ),
-                Tab(
-                  icon: Icon(Icons.bookmark_outline),
-                  text: 'Saved',
-                ),
-              ],
-            ),
-          ),
-          
-          // Tab Views
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildUserPostsTab(),
-                _buildUserCommentsTab(),
-                _buildSavedPostsTab(),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatCard(String title, String count, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            color: AppTheme.primaryColor,
-            size: 24,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            count,
-            style: GoogleFonts.poppins(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppTheme.textPrimaryColor,
-            ),
-          ),
-          Text(
-            title,
-            style: GoogleFonts.poppins(
-              fontSize: 12,
-              color: AppTheme.textSecondaryColor,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  Widget _buildUserPostsTab() {
-    return Obx(() {
-      final userPosts = _userController.getUserPosts(_postController.posts.value);
-      
-      if (_postController.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      } else if (userPosts.isEmpty) {
-        return _buildEmptyState(
-          Icons.article_outlined,
-          'No posts yet',
-          'Start sharing your thoughts with the community!',
-        );
-      }
-      
-      return ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: userPosts.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: PostData(post: userPosts[index]),
           );
-        },
-      );
-    });
-  }
-
-  Widget _buildUserCommentsTab() {
-    return Obx(() {
-      // For now, we'll show a placeholder since we don't have user-specific comments
-      // In a real app, you'd fetch comments made by the current user
-      
-      if (_postController.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-      
-      return _buildEmptyState(
-        Icons.comment_outlined,
-        'No comments yet',
-        'Join the conversation by commenting on posts!',
-      );
-    });
   }
 
   Widget _buildSavedPostsTab() {

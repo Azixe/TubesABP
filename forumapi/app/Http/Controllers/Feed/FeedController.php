@@ -8,6 +8,7 @@ use App\Http\Requests\PostRequest;
 use App\Models\Feed;
 use App\Models\Like;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class FeedController extends Controller
 {
@@ -37,7 +38,7 @@ class FeedController extends Controller
     }
 
     public function likePost($feed_id){
-        //select feed with feed_id
+        //memilih post dengan feed_id
         $feed = Feed::whereId($feed_id)->first();
 
         if(!$feed){
@@ -104,5 +105,15 @@ class FeedController extends Controller
     return response([
             'total_comment' => $total_comment
         ], 201);
+    }
+
+    public function getUserPost(Request $request) {
+        $user = Auth::user();
+
+        $posts = Feed::where('user_id', $user->id)->latest()->get();
+
+        return response()->json([
+            'posts' => $posts
+        ]);
     }
 }

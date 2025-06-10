@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Feed\FeedController;
+use App\Http\Controllers\Profiles\UsersProfile;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,8 @@ Route::post('/feed/comment/{feed_id}', [FeedController::class, 'comment'])->midd
 Route::get('/feed/comments/{feed_id}', [FeedController::class, 'getComments'])->middleware('auth:sanctum');
 Route::get('/feed/totalcomment/{feed_id}', [FeedController::class, 'totalComment'])->middleware('auth:sanctum');
 Route::get('/feed/totallikes/{feed_id}', [FeedController::class, 'totalLikes'])->middleware('auth:sanctum');
+Route::get('/profiles', [UsersProfile::class, 'Profile'])->middleware('auth:sanctum');
+Route::get('/profile/user', [FeedController::class, 'getUserPost'])->middleware('auth:sanctum');
 
 Route::get('/test',function(){
     return response([
