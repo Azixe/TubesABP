@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:forumapp/models/post_model.dart';
 import 'package:forumapp/controllers/post_controller.dart';
+import 'package:forumapp/controllers/user_controller.dart';
 import 'package:forumapp/constants/app_theme.dart';
 
 class PostData extends StatefulWidget {
@@ -17,6 +18,7 @@ class PostData extends StatefulWidget {
 
 class _PostDataState extends State<PostData> {
   final PostController _postController = Get.put(PostController());
+  final UserController _userController = Get.put(UserController());
   bool likedPost = true;
 
   @override
@@ -30,8 +32,7 @@ class _PostDataState extends State<PostData> {
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // User info row with avatar
+          children: [            // User info row with avatar
             Row(
               children: [
                 CircleAvatar(
@@ -69,6 +70,36 @@ class _PostDataState extends State<PostData> {
                     ],
                   ),
                 ),
+                // Menu dropdown for post owner
+                Obx(() {
+                  if (_userController.isCurrentUserPost(widget.post)) {
+                    return PopupMenuButton<String>(
+                      onSelected: (value) {
+                        if (value == 'delete') {
+                          _showDeleteConfirmation();
+                        }
+                      },
+                      itemBuilder: (BuildContext context) => [
+                        const PopupMenuItem<String>(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete, color: Colors.red, size: 18),
+                              SizedBox(width: 8),
+                              Text('Delete Post', style: TextStyle(color: Colors.red)),
+                            ],
+                          ),
+                        ),
+                      ],
+                      child: Icon(
+                        Icons.more_vert,
+                        color: AppTheme.textSecondaryColor,
+                      ),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                }),
               ],
             ),
             
@@ -85,8 +116,7 @@ class _PostDataState extends State<PostData> {
             
             const SizedBox(height: 16),
             const Divider(height: 1),
-            
-            // Action buttons
+              // Action buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -121,7 +151,7 @@ class _PostDataState extends State<PostData> {
                     size: 20,
                   ),
                   label: Text(
-                    '${widget.post.totalLikes ?? 0} Comment',
+                    '${widget.post.totalComment ?? 0} Comment',
                     style: GoogleFonts.poppins(
                       color: AppTheme.textSecondaryColor,
                       fontSize: 14,
@@ -132,6 +162,68 @@ class _PostDataState extends State<PostData> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showDeleteConfirmation() {
+    Get.dialog(
+      AlertDialog(
+        title: Text(
+          'Delete Post',
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w600,
+            color: AppTheme.textPrimaryColor,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to delete this post? This action cannot be undone.',
+          style: GoogleFonts.poppins(
+            color: AppTheme.textSecondaryColor,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.poppins(
+                color: AppTheme.textSecondaryColor,
+              ),
+            ),
+          ),
+          Obx(() => ElevatedButton(
+                onPressed: _postController.isLoading.value
+                    ? null
+                    : () async {
+                        Get.back(); // Close dialog first
+                        final success = await _postController.deletePost(widget.post.id!);
+                        if (success) {
+                          // Post deleted successfully, no need for additional action
+                          // as the controller already refreshes the posts list
+                        }
+                      },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
+                child: _postController.isLoading.value
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : Text(
+                        'Delete',
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+              )),
+        ],
       ),
     );
   }

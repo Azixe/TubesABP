@@ -214,4 +214,73 @@ Future<int?> getTotalComment(int feed_id) async {
     return null;
   }
 }
+
+Future<bool> deletePost(int postId) async {
+    try {
+      isLoading.value = true;
+      
+      var response = await http.delete(
+        Uri.parse('${url}feed/$postId'),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${box.read('token')}',
+        },
+      );
+
+      isLoading.value = false;
+
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          'Success',
+          'Post deleted successfully',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        
+        // Refresh posts list
+        await getAllPosts();
+        return true;
+      } else if (response.statusCode == 403) {
+        Get.snackbar(
+          'Error',
+          'You can only delete your own posts',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return false;
+      } else if (response.statusCode == 404) {
+        Get.snackbar(
+          'Error',
+          'Post not found',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return false;
+      } else {
+        final errorData = json.decode(response.body);
+        Get.snackbar(
+          'Error',
+          errorData['message'] ?? 'Failed to delete post',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return false;
+      }
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar(
+        'Error',
+        'Network error occurred',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      print('Delete post error: $e');
+      return false;
+    }
+  }
 }

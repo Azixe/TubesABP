@@ -116,4 +116,28 @@ class FeedController extends Controller
             'posts' => $posts
         ]);
     }
+
+    public function deletePost($feed_id) {
+        $feed = Feed::find($feed_id);
+        
+        if (!$feed) {
+            return response([
+                'message' => 'Post not found'
+            ], 404);
+        }
+        
+        // Check if the user owns this post
+        if ($feed->user_id !== auth()->id()) {
+            return response([
+                'message' => 'Unauthorized. You can only delete your own posts.'
+            ], 403);
+        }
+        
+        // Delete the post
+        $feed->delete();
+        
+        return response([
+            'message' => 'Post deleted successfully'
+        ], 200);
+    }
 }

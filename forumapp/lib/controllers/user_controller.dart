@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:forumapp/constants/constants.dart';
 import 'package:forumapp/models/post_model.dart';
-import 'package:forumapp/models/comment_model.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -37,11 +35,10 @@ class UserController extends GetxController {
       'Accept': 'application/json',
     },
   );
-
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
     profile.value = data['profile'];
-    print("Profile data: ${profile.value}");
+    print("Profile data: ${profile}");
   } else {
     print("Gagal mengambil profil: ${response.body}");
   }
@@ -80,5 +77,23 @@ class UserController extends GetxController {
   //   userCommentsCount.value = 0; // Placeholder
   //   savedPostsCount.value = savedPosts.length;
   // }
+  // Helper method to get current user ID
+  int? getCurrentUserId() {
+    try {
+      if (profile.isNotEmpty && profile['id'] != null) {
+        return profile['id'] as int;
+      }
+      return null;
+    } catch (e) {
+      print('Error getting current user ID: $e');
+      return null;
+    }
+  }
+
+  // Helper method to check if current user owns a post
+  bool isCurrentUserPost(PostModel post) {
+    final currentUserId = getCurrentUserId();
+    return currentUserId != null && post.userId == currentUserId;
+  }
 
 }
