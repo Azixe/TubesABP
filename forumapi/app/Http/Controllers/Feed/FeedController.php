@@ -119,7 +119,7 @@ class FeedController extends Controller
 
     public function deletePost($feed_id) {
         $feed = Feed::find($feed_id);
-        
+        $likes = Like::where('feed_id', $feed_id);
         if (!$feed) {
             return response([
                 'message' => 'Post not found'
@@ -133,6 +133,9 @@ class FeedController extends Controller
             ], 403);
         }
         
+        if ($likes) {
+            $likes->delete();
+        }
         // Delete the post
         $feed->delete();
         
